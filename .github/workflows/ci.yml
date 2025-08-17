@@ -34,6 +34,14 @@ jobs:
           git clone --branch v3.12.0 https://github.com/nlohmann/json.git
           cmake -S json -B json/build -DCMAKE_BUILD_TYPE=Release
           cmake --build json/build --target install
+      - name: Configure cnmea
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
+
+      - name: Build cnmea
+        run: cmake --build build --config Release
+
+      - name: Install cnmea
+        run: cmake --install build
       - name: Test system install (find_package)
         run: |
           cmake -E make_directory test_find_package
@@ -46,7 +54,7 @@ jobs:
           target_link_libraries(test PRIVATE cnmea::cnmea)
           EOF
           echo '#include <cnmea/cnmea.hpp>\nint main() { return 0; }' > main.cpp
-          cmake -B build -S . -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install
+          cmake -B build -S . -DCMAKE_PREFIX_PATH=$PWD/../install
           cmake --build build
 
       # -----------------------
