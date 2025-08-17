@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <include/cnmea/cnmea.h>
+#include <cnmea/cnmea.h>
 
 int main() {
   std::cout << "Testing cnmea library..." << std::endl;
