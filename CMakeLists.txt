@@ -39,6 +39,9 @@ target_include_directories(
 
 # target_link_libraries(${PROJECT_NAME} INTERFACE nlohmann_json::nlohmann_json)
 
+add_executable(${PROJECT_NAME}_example example/main.cpp)
+target_link_libraries(${PROJECT_NAME}_example PRIVATE ${PROJECT_NAME})
+
 # Installation rules
 include(GNUInstallDirs)
 

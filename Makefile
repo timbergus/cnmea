@@ -13,7 +13,7 @@ install: project
 	cmake --install $(BUILD) --prefix install
 
 start: project
-	./$(BUILD)/$(PROJECT)
+	./$(BUILD)/$(PROJECT)_example
 
 documentation: project
 	cmake --build $(BUILD) --target docs
