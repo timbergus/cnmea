@@ -6,11 +6,11 @@
 #include "types.h"
 
 /**
- * @namespace gps_lib
+ * @namespace cnmea
  * @brief A header-only C++ library for parsing and processing NMEA GPS
  * sentences.
  */
-namespace gps_lib {
+namespace cnmea {
 /**
  * @brief Prints the GGA data.
  * @param data The GGA data to print.
@@ -130,4 +130,4 @@ inline void print_sample(const std::expected<Sample, ParseError> &sample) {
         sample.value());
   }
 }
-} // namespace gps_lib
+} // namespace cnmea

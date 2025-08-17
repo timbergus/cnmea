@@ -5,11 +5,11 @@
 #include <vector>
 
 /**
- * @namespace gps_lib
+ * @namespace cnmea
  * @brief A header-only C++ library for parsing and processing NMEA GPS
  * sentences.
  */
-namespace gps_lib {
+namespace cnmea {
 /**
  * @brief This enum represents the speed units in meters per second and
  * kilometers per hour.
@@ -189,4 +189,4 @@ enum class ParseError {
  * @brief This variant represents a sample NMEA sentence.
  */
 using Sample = std::variant<GGA, GLL, GSA, GSV, RMC, VTG, ZDA>;
-} // namespace gps_lib
+} // namespace cnmea

@@ -5,7 +5,7 @@
 
 #include "split.h"
 
-namespace gps_lib::detail {
+namespace cnmea::detail {
 /**
  * @brief Tokenizes a string_view into a vector of string_views based on the '*'
  * separator.
@@ -17,4 +17,4 @@ inline std::vector<std::string_view> tokenize(const std::string_view sample) {
   std::vector<std::string_view> raw_data = detail::split(sample, '*');
   return detail::split(raw_data.at(0), ',');
 }
-} // namespace gps_lib::detail
+} // namespace cnmea::detail

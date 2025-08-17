@@ -6,11 +6,11 @@
 #include "types.h"
 
 /**
- * @namespace gps_lib
+ * @namespace cnmea
  * @brief A header-only C++ library for parsing and processing NMEA GPS
  * sentences.
  */
-namespace gps_lib {
+namespace cnmea {
 /**
  * @brief Serializes a Latitude object to JSON.
  * @param j The JSON object to populate.
@@ -179,4 +179,4 @@ inline bool save_to_json(const Sample &sample, const std::string &filename) {
     return false;
   }
 }
-} // namespace gps_lib
+} // namespace cnmea

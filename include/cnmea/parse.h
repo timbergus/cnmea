@@ -11,11 +11,11 @@
 #include "types.h"
 
 /**
- * @namespace gps_lib
+ * @namespace cnmea
  * @brief A header-only C++ library for parsing and processing NMEA GPS
  * sentences.
  */
-namespace gps_lib {
+namespace cnmea {
 /**
  * @brief Concept that checks if a type is string-like.
  */
@@ -30,7 +30,7 @@ concept StringLike = std::convertible_to<T, std::string_view>;
  * @throws std::invalid_argument If numeric fields are malformed.
  */
 inline std::expected<Sample, ParseError> parse(StringLike auto const &sample) {
-  if (!gps_lib::is_valid_sample(sample)) {
+  if (!cnmea::is_valid_sample(sample)) {
     return std::unexpected(ParseError::InvalidFormat);
   }
 
@@ -256,4 +256,4 @@ inline std::expected<Sample, ParseError> parse(StringLike auto const &sample) {
     return std::unexpected(ParseError::UnsupportedType);
   }
 }
-} // namespace gps_lib
+} // namespace cnmea

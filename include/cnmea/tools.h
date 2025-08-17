@@ -7,7 +7,7 @@
 
 #include "detail/split.h"
 
-namespace gps_lib {
+namespace cnmea {
 /**
  * @brief Checks if a given NMEA sentence is valid.
  * @param sample The NMEA sentence to validate.
@@ -39,4 +39,4 @@ inline bool is_valid_sample(const std::string_view sample) {
 
   return hex_check.str() == tokens.at(1);
 }
-} // namespace gps_lib
+} // namespace cnmea

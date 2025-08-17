@@ -3,7 +3,7 @@
 #include <string>
 #include <tuple>
 
-namespace gps_lib::detail {
+namespace cnmea::detail {
 /**
  * @brief Parses a UTC time string in the format HHMMSS.
  * @param utc_time The UTC time string to parse.
@@ -17,4 +17,4 @@ inline auto parse_utc_time(const std::string utc_time) {
       std::string{utc_time.substr(4, 2)}, // Seconds.
   };
 }
-} // namespace gps_lib::detail
+} // namespace cnmea::detail

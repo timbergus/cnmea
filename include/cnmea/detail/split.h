@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace gps_lib::detail {
+namespace cnmea::detail {
 /**
  * @brief Splits a string_view into a vector of string_views based on a
  * separator.
@@ -27,4 +27,4 @@ inline std::vector<std::string_view> split(const std::string_view sample,
 
   return tokens;
 }
-} // namespace gps_lib::detail
+} // namespace cnmea::detail

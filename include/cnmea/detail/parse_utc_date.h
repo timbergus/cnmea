@@ -3,7 +3,7 @@
 #include <string>
 #include <tuple>
 
-namespace gps_lib::detail {
+namespace cnmea::detail {
 /**
  * @brief Parses a UTC date string in the format DDMMYY.
  * @param utc_date The UTC date string to parse.
@@ -16,4 +16,4 @@ inline auto parse_utc_date(const std::string utc_date) {
       std::string{utc_date.substr(4, 2)}, // Year.
   };
 }
-} // namespace gps_lib::detail
+} // namespace cnmea::detail

@@ -1,5 +1,5 @@
 BUILD=build
-PROJECT=gps_lib_playground
+PROJECT=cnmea
 
 init:
 	cmake -B $(BUILD) \

@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-namespace gps_lib::detail {
+namespace cnmea::detail {
 /**
  * @brief Parses a speed string in the format DDD.DD.
  * @param speed The speed string to parse.
@@ -16,4 +16,4 @@ inline double parse_speed(const std::string speed, Units units) {
   double velocity = std::stod(std::string{speed});
   return units == Units::ms ? velocity * KNTOMS : velocity * KNTOKMH;
 }
-} // namespace gps_lib::detail
+} // namespace cnmea::detail
