@@ -37,7 +37,7 @@ target_include_directories(
   $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(${PROJECT_NAME} INTERFACE nlohmann_json::nlohmann_json)
+# target_link_libraries(${PROJECT_NAME} INTERFACE nlohmann_json::nlohmann_json)
 
 # Installation rules
 include(GNUInstallDirs)
