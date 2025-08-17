@@ -29,6 +29,11 @@ jobs:
       # -----------------------
       # 2. Test find_package(cnmea)
       # -----------------------
+      - name: Install nlohmann_json
+        run: |
+          git clone --branch v3.12.0 https://github.com/nlohmann/json.git
+          cmake -S json -B json/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build json/build --target install
       - name: Test system install (find_package)
         run: |
           cmake -E make_directory test_find_package
