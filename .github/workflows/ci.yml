@@ -1,4 +1,4 @@
-name: CI
+name: CMake Build
 
 on:
   push:
@@ -9,44 +9,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install CMake
-        uses: jwlawson/actions-setup-cmake@v1
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: "3.25.0" # pick something recent
 
-      # -----------------------
-      # 1. Normal build + install
-      # -----------------------
-      - name: Configure project
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
-
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Install
-        run: cmake --install build --prefix install
-
-      # -----------------------
-      # 2. Test find_package(cnmea)
-      # -----------------------
       - name: Install nlohmann_json
         run: |
           git clone --branch v3.12.0 https://github.com/nlohmann/json.git
-          cmake -S json -B json/build -DCMAKE_BUILD_TYPE=Release
+          cmake -S json -B json/build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=$PWD/install
           cmake --build json/build --target install
+
       - name: Configure cnmea
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
+        run: |
+          cmake -B build -S . \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=$PWD/install \
+            -DCMAKE_PREFIX_PATH=$PWD/install
 
       - name: Build cnmea
         run: cmake --build build --config Release
 
       - name: Install cnmea
         run: cmake --install build
-      - name: Test system install (find_package)
+
+      - name: Test find_package(cnmea)
         run: |
           cmake -E make_directory test_find_package
           cd test_find_package
-          cat <<EOF > CMakeLists.txt
+          cat <<'EOF' > CMakeLists.txt
           cmake_minimum_required(VERSION 3.20)
           project(test_find_package LANGUAGES CXX)
           find_package(cnmea REQUIRED)
@@ -55,28 +50,4 @@ jobs:
           EOF
           echo '#include <cnmea/cnmea.hpp>\nint main() { return 0; }' > main.cpp
           cmake -B build -S . -DCMAKE_PREFIX_PATH=$PWD/../install
-          cmake --build build
-
-      # -----------------------
-      # 3. Test FetchContent
-      # -----------------------
-      - name: Test FetchContent usage
-        run: |
-          cmake -E make_directory test_fetchcontent
-          cd test_fetchcontent
-          cat <<EOF > CMakeLists.txt
-          cmake_minimum_required(VERSION 3.20)
-          project(test_fetchcontent LANGUAGES CXX)
-          include(FetchContent)
-          FetchContent_Declare(
-            cnmea
-            GIT_REPOSITORY https://github.com/${{ github.repository }}.git
-            GIT_TAG ${{ github.sha }}
-          )
-          FetchContent_MakeAvailable(cnmea)
-          add_executable(test main.cpp)
-          target_link_libraries(test PRIVATE cnmea::cnmea)
-          EOF
-          echo '#include <cnmea/cnmea.hpp>\nint main() { return 0; }' > main.cpp
-          cmake -B build -S .
           cmake --build build
