@@ -43,28 +43,37 @@ target_link_libraries(${PROJECT_NAME} INTERFACE nlohmann_json::nlohmann_json)
 include(GNUInstallDirs)
 
 install(TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}Targets
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  EXPORT ${PROJECT_NAME}Targets
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Export targets for find_package()
 install(EXPORT ${PROJECT_NAME}Targets
-    FILE ${PROJECT_NAME}Config.cmake
-    NAMESPACE ${PROJECT_NAME}::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  FILE ${PROJECT_NAME}Config.cmake
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
 # Optional: version file
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    ${PROJECT_NAME}ConfigVersion.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
+  ${PROJECT_NAME}ConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
 )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
 # >>> Testing
