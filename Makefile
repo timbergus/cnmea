@@ -10,10 +10,10 @@ project: init
 	cmake --build $(BUILD) --config Release
 
 install: project
-	cmake --install $(BUILD) --prefix install
+	cmake --install $(BUILD) --config Release --prefix install
 
 start: project
-	./$(BUILD)/$(PROJECT)_example
+	./$(BUILD)/$(PROJECT)_test
 
 documentation: project
 	cmake --build $(BUILD) --target docs
