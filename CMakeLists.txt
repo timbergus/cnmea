@@ -11,6 +11,7 @@ set(PROJECT_AUTHOR "Gustavo Muñoz")
 add_compile_options(-Wall -Wextra -Werror -Wpedantic)
 
 add_library(${PROJECT_NAME} INTERFACE)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_STANDARD 20
@@ -19,11 +20,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_EXPORT_COMPILE_COMMANDS ON
 )
 
-# Cache variables for installation destinations.
 include(GNUInstallDirs)
 
 target_include_directories(${PROJECT_NAME} INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
