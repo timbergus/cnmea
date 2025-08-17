@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.1.0)
 project(
   cnmea
-  VERSION 0.1.0
+  VERSION 0.0.6
   DESCRIPTION "C NMEA 0183 Parser"
   LANGUAGES C CXX
 )
@@ -27,18 +27,12 @@ target_include_directories(${PROJECT_NAME} INTERFACE
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-install(TARGETS ${PROJECT_NAME}
-  EXPORT ${PROJECT_NAME}Targets
-  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(
-  FILES include/${PROJECT_NAME}/${PROJECT_NAME}.h
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-install(EXPORT ${PROJECT_NAME}Targets
-  FILE ${PROJECT_NAME}Targets.cmake
+  EXPORT ${PROJECT_NAME}Targets
   NAMESPACE ${PROJECT_NAME}::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
@@ -51,8 +45,16 @@ configure_package_config_file(
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
-install(FILES
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(
+  FILES
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
@@ -132,11 +134,18 @@ target_link_libraries(${PROJECT_NAME}_test PRIVATE ${PROJECT_NAME})
 #   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 # )
 
-# # >>> Testing
-# include(CTest)
-# enable_testing()
+# >>> Testing
+include(CTest)
+enable_testing()
+# <<< Testing
 
-# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-# include(CPack)
-# # <<< Testing
+# >>> CPack metadata
+include(InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_VENDOR ${PROJECT_AUTHOR})
+set(CPACK_GENERATOR "ZIP;TGZ")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+include(CPack)
+# <<< CPack metadata
