@@ -51,15 +51,16 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Export targets for find_package()
 install(EXPORT ${PROJECT_NAME}Targets
-  FILE ${PROJECT_NAME}Config.cmake
+  FILE ${PROJECT_NAME}Targets.cmake
   NAMESPACE ${PROJECT_NAME}::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
 # Optional: version file
 include(CMakePackageConfigHelpers)
+
 write_basic_package_version_file(
-  ${PROJECT_NAME}ConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
 )

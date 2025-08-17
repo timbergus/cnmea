@@ -1,6 +1,9 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
+
+# Re-find dependencies when someone calls find_package(cnmea)
 find_dependency(nlohmann_json)
 
+# Load the exported target definitions
 include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
