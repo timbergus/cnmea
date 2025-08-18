@@ -5,3 +5,4 @@ build/
 _CPack*
 *.zip
 install/
+docs/

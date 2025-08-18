@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.1.0)
 project(
   cnmea
-  VERSION 0.0.6
+  VERSION 0.0.7
   DESCRIPTION "C NMEA 0183 Parser"
   LANGUAGES C CXX
 )
@@ -40,7 +40,7 @@ install(
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
@@ -133,6 +133,34 @@ target_link_libraries(${PROJECT_NAME}_test PRIVATE ${PROJECT_NAME})
 #   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
 #   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 # )
+
+# >>> Doxygen setup
+find_package(Doxygen REQUIRED)
+
+if (DOXYGEN_FOUND)
+  set(DOXYGEN_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/docs)
+  set(DOXYGEN_INPUT_DIR ${CMAKE_SOURCE_DIR}/src)
+
+  # file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
+
+  set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/Doxyfile)
+  set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/Doxyfile)
+
+  configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+  add_custom_target(docs
+    COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Generating API documentation with Doxygen"
+    VERBATIM
+  )
+
+  install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}/html/
+    DESTINATION docs
+    COMPONENT docs
+  )
+endif()
+# <<< Doxygen setup
 
 # >>> Testing
 include(CTest)

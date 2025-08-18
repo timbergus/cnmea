@@ -15,10 +15,13 @@ install: project
 start: project
 	./$(BUILD)/$(PROJECT)_test
 
+documentation: project
+	cmake --build $(BUILD) --target docs
+
 test: project
 	ctest --test-dir $(BUILD)
 
-package: project
+package: project documentation
 	cpack -G ZIP --config $(BUILD)/CPackConfig.cmake
 
 clean:
