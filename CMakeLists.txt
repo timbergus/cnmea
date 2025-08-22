@@ -8,17 +8,22 @@ project(
 
 set(PROJECT_AUTHOR "Gustavo Muñoz")
 
+set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_compile_options(-Wall -Wextra -Werror -Wpedantic)
 
 add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  CMAKE_CXX_STANDARD 20
-  CMAKE_CXX_STANDARD_REQUIRED ON
-  CMAKE_CXX_EXTENSIONS OFF
-  CMAKE_EXPORT_COMPILE_COMMANDS ON
-)
+# set_target_properties(${PROJECT_NAME} PROPERTIES
+#   CMAKE_CXX_STANDARD 26
+#   CMAKE_CXX_STANDARD_REQUIRED ON
+#   CMAKE_CXX_EXTENSIONS OFF
+#   CMAKE_EXPORT_COMPILE_COMMANDS ON
+# )
 
 include(GNUInstallDirs)
 
@@ -58,9 +63,16 @@ install(
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
-# This is the testing target for internal development.
-add_executable(${PROJECT_NAME}_test test/main.cpp)
-target_link_libraries(${PROJECT_NAME}_test PRIVATE ${PROJECT_NAME})
+# This is the target for internal development.
+add_executable(${PROJECT_NAME}_usage ${PROJECT_NAME}_usage/main.cpp)
+target_link_libraries(${PROJECT_NAME}_usage PRIVATE ${PROJECT_NAME})
+
+# set_target_properties(${PROJECT_NAME}_test PROPERTIES
+#   CMAKE_CXX_STANDARD 26
+#   CMAKE_CXX_STANDARD_REQUIRED ON
+#   CMAKE_CXX_EXTENSIONS OFF
+#   CMAKE_EXPORT_COMPILE_COMMANDS ON
+# )
 
 # set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
