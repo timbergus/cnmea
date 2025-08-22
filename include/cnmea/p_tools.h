@@ -9,10 +9,10 @@ namespace cnmea::p_tools {
 
 inline std::string to_string(const types::Status &status) {
   switch (status) {
-  case types::Status::Active:
-    return "Active";
-  case types::Status::Void:
-    return "Void";
+  case types::Status::Valid:
+    return "Valid";
+  case types::Status::Invalid:
+    return "Invalid";
   }
   return "--";
 }
@@ -26,21 +26,45 @@ inline std::string to_string(const std::optional<types::Mode> &mode) {
       return "Differential";
     case types::Mode::Estimated:
       return "Estimated";
+    case types::Mode::ManualInput:
+      return "Manual Input";
     case types::Mode::NotValid:
       return "Not Valid";
+    case types::Mode::Simulation:
+      return "Simulation";
+    case types::Mode::Precise:
+      return "Precise";
+    case types::Mode::RTKFixed:
+      return "RTK Fixed";
+    case types::Mode::RTKFloat:
+      return "RTK Float";
+    case types::Mode::Uncalibrated:
+      return "Uncalibrated";
     }
   }
   return "--";
 }
 
-inline std::string to_string(const types::Units &units) {
-  switch (units) {
-  case types::Units::ms:
+inline std::string to_string(const types::SpeedUnits &speed_units) {
+  switch (speed_units) {
+  case types::SpeedUnits::ms:
     return "m/s";
-  case types::Units::kmh:
+  case types::SpeedUnits::kmh:
     return "km/h";
-  case types::Units::knots:
+  case types::SpeedUnits::knots:
     return "knots";
+  }
+  return "--";
+}
+
+inline std::string to_string(const types::DistanceUnits &distance_units) {
+  switch (distance_units) {
+  case types::DistanceUnits::m:
+    return "m";
+  case types::DistanceUnits::km:
+    return "km";
+  case types::DistanceUnits::ft:
+    return "ft";
   }
   return "--";
 }
@@ -87,12 +111,17 @@ inline std::string to_string(const std::optional<types::UTCDate> &utc_date) {
     return std::format("{}/{}/{}", utc_date->day, utc_date->month,
                        utc_date->year);
   }
-  return "--";
+  return "--/--/--";
 }
 
 inline std::string to_string(const types::UTCTime &utc_time) {
-  return std::format("{}:{}:{}", utc_time.hours, utc_time.minutes,
-                     utc_time.seconds);
+  if (!(utc_time.hours.empty() || utc_time.minutes.empty() ||
+        utc_time.seconds.empty())) {
+
+    return std::format("{}:{}:{}", utc_time.hours, utc_time.minutes,
+                       utc_time.seconds);
+  }
+  return "--:--:--";
 }
 
 inline std::string to_string(const std::optional<types::Speed> &speed) {
@@ -118,8 +147,8 @@ inline std::string to_string(const types::Type &type) {
     return "GGA";
   case types::Type::RMC:
     return "RMC";
-  case types::Type::VTG:
-    return "VTG";
+  case types::Type::GLL:
+    return "GLL";
   }
   return "--";
 }
@@ -152,6 +181,66 @@ inline std::string to_string(const types::ParseError &error) {
     return "Invalid Magnetic Variation";
   case types::ParseError::InvalidMode:
     return "Invalid Mode";
+  }
+  return "--";
+}
+
+inline std::string
+to_string(const std::optional<types::FixQuality> &fix_quality) {
+  if (fix_quality) {
+    switch (fix_quality.value()) {
+    case types::FixQuality::Invalid:
+      return "Invalid";
+    case types::FixQuality::GPS:
+      return "GPS";
+    case types::FixQuality::DGPS:
+      return "DGPS";
+    case types::FixQuality::PPS:
+      return "PPS";
+    case types::FixQuality::RealTimeKinematic:
+      return "Real Time Kinematic";
+    case types::FixQuality::FloatRTK:
+      return "Float RTK";
+    case types::FixQuality::Estimated:
+      return "Estimated";
+    case types::FixQuality::ManualInput:
+      return "Manual Input";
+    case types::FixQuality::Simulation:
+      return "Simulation";
+    }
+  }
+  return "--";
+}
+
+inline std::string to_string(const std::optional<types::Altitude> &altitude) {
+  if (altitude) {
+    return std::format("{} {}", altitude->value_meters(),
+                       to_string(altitude->get_units()));
+  }
+  return "--";
+}
+
+inline std::string
+to_string(const std::optional<types::GeoidSeparation> &geoid_separation) {
+  if (geoid_separation) {
+    return std::format("{} {}", geoid_separation->value_meters(),
+                       to_string(geoid_separation->get_units()));
+  }
+  return "--";
+}
+
+inline std::string
+to_string(const std::optional<types::AgeOfDgps> &age_of_dgps) {
+  if (age_of_dgps) {
+    return std::format("{}", age_of_dgps->value_seconds());
+  }
+  return "--";
+}
+
+inline std::string
+to_string(const std::optional<types::DgpsStationId> &dgps_station_id) {
+  if (dgps_station_id) {
+    return std::format("{}", dgps_station_id->value());
   }
   return "--";
 }

@@ -6,10 +6,16 @@
 
 namespace cnmea::types {
 
-enum class Units {
+enum class SpeedUnits {
   ms,
   kmh,
   knots,
+};
+
+enum class DistanceUnits {
+  m,
+  km,
+  ft,
 };
 
 enum class Direction {
@@ -90,13 +96,13 @@ public:
 struct Speed {
 private:
   double value;
-  Units units = Units::knots;
+  SpeedUnits units = SpeedUnits::knots;
 
 public:
-  Speed(double value, Units units = Units::knots)
+  Speed(double value, SpeedUnits units = SpeedUnits::knots)
       : value(value), units(units) {}
   double get_value() const { return value; }
-  Units get_units() const { return units; }
+  SpeedUnits get_units() const { return units; }
 };
 
 struct UTCTime {
@@ -114,19 +120,37 @@ struct UTCDate {
 enum class Type {
   GGA,
   RMC,
-  VTG,
+  GLL,
 };
 
 enum class Status {
-  Active,
-  Void,
+  Valid,
+  Invalid,
 };
 
 enum class Mode {
   Autonomous,
   Differential,
   Estimated,
+  ManualInput,
+  Simulation,
   NotValid,
+  Precise,
+  RTKFixed,
+  RTKFloat,
+  Uncalibrated,
+};
+
+enum class FixQuality {
+  Invalid = 0,
+  GPS = 1,
+  DGPS = 2,
+  PPS = 3,
+  RealTimeKinematic = 4,
+  FloatRTK = 5,
+  Estimated = 6,
+  ManualInput = 7,
+  Simulation = 8
 };
 
 struct MagneticVariation {
@@ -145,6 +169,52 @@ public:
   double value_radians() const {
     return value_degrees() * std::numbers::pi / 180.0;
   }
+};
+struct Altitude {
+private:
+  double value;
+  DistanceUnits units;
+
+public:
+  Altitude(double value, DistanceUnits units = DistanceUnits::m)
+      : value(value), units(units) {}
+  double get_value() const { return value; }
+  DistanceUnits get_units() const { return units; }
+  double value_meters() const { return value; }
+  double value_feet() const { return value * 3.28084; }
+};
+
+struct GeoidSeparation {
+private:
+  double value;
+  DistanceUnits units;
+
+public:
+  GeoidSeparation(double value, DistanceUnits units = DistanceUnits::m)
+      : value(value), units(units) {}
+  double get_value() const { return value; }
+  DistanceUnits get_units() const { return units; }
+  double value_meters() const { return value; }
+  double value_feet() const { return value * 3.28084; }
+};
+
+struct AgeOfDgps {
+private:
+  double seconds;
+
+public:
+  AgeOfDgps(double seconds) : seconds(seconds) {}
+  double value_seconds() const { return seconds; }
+  double value_minutes() const { return seconds / 60.0; }
+};
+
+struct DgpsStationId {
+private:
+  int id;
+
+public:
+  DgpsStationId(int id) : id(id) {}
+  int value() const { return id; }
 };
 
 using Element = std::variant<types::ParseError>;
