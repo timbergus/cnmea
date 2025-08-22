@@ -228,6 +228,10 @@ inline types::Type parse_type(std::string_view type) {
     return types::Type::RMC;
   } else if (type.find("GLL") != std::string::npos) {
     return types::Type::GLL;
+  } else if (type.find("VTG") != std::string::npos) {
+    return types::Type::VTG;
+  } else if (type.find("ZDA") != std::string::npos) {
+    return types::Type::ZDA;
   }
   throw std::invalid_argument("Unknown type");
 }

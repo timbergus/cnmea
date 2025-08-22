@@ -50,7 +50,7 @@ inline std::expected<GGA, types::ParseError> parse(std::string_view sample) {
   };
 }
 
-inline void print([[maybe_unused]] const GGA &data) {
+inline void print(const GGA &data) {
   std::println("Type: {}", p_tools::to_string(data.type));
   std::println("UTC Time: {}", p_tools::to_string(data.utc_time));
   std::println("Latitude: {}", p_tools::to_string(data.latitude));

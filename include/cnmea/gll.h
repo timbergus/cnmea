@@ -14,9 +14,9 @@ struct GLL {
   types::Type type;
   std::optional<types::Latitude> latitude;
   std::optional<types::Longitude> longitude;
-  types::UTCTime utc_time;         // hhmmss.sss
-  types::Status status;            // A=valid, V=invalid
-  std::optional<types::Mode> mode; // A, D, E... (optional, only in NMEA 2.3+)
+  types::UTCTime utc_time;
+  types::Status status;
+  std::optional<types::Mode> mode;
 };
 
 inline std::expected<GLL, types::ParseError> parse(std::string_view sample) {
@@ -40,7 +40,7 @@ inline std::expected<GLL, types::ParseError> parse(std::string_view sample) {
   };
 }
 
-inline void print([[maybe_unused]] const GLL &data) {
+inline void print(const GLL &data) {
   std::println("Type: {}", p_tools::to_string(data.type));
   std::println("Latitude: {}", p_tools::to_string(data.latitude));
   std::println("Longitude: {}", p_tools::to_string(data.longitude));

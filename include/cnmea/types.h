@@ -121,6 +121,8 @@ enum class Type {
   GGA,
   RMC,
   GLL,
+  VTG,
+  ZDA,
 };
 
 enum class Status {

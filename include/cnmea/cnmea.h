@@ -9,14 +9,18 @@
 #include "gll.h"
 #include "rmc.h"
 #include "types.h"
+#include "vtg.h"
+#include "zda.h"
 
 namespace cnmea {
 
 using RMC = rmc::RMC;
 using GGA = gga::GGA;
 using GLL = gll::GLL;
+using VTG = vtg::VTG;
+using ZDA = zda::ZDA;
 
-using Sample = std::variant<RMC, GGA, GLL>;
+using Sample = std::variant<RMC, GGA, GLL, VTG, ZDA>;
 
 inline std::expected<Sample, types::ParseError> parse(std::string_view sample) {
   if (sample.find("RMC") != std::string::npos) {
@@ -25,6 +29,10 @@ inline std::expected<Sample, types::ParseError> parse(std::string_view sample) {
     return gga::parse(sample);
   } else if (sample.find("GLL") != std::string::npos) {
     return gll::parse(sample);
+  } else if (sample.find("VTG") != std::string::npos) {
+    return vtg::parse(sample);
+  } else if (sample.find("ZDA") != std::string::npos) {
+    return zda::parse(sample);
   }
   return std::unexpected(types::ParseError::UnsupportedType);
 }
@@ -39,6 +47,10 @@ inline void print(const Sample &sample) {
           gga::print(data);
         } else if constexpr (std::is_same_v<T, gll::GLL>) {
           gll::print(data);
+        } else if constexpr (std::is_same_v<T, vtg::VTG>) {
+          vtg::print(data);
+        } else if constexpr (std::is_same_v<T, zda::ZDA>) {
+          zda::print(data);
         } else {
           std::println("Print function not implemented for this type");
         }

@@ -149,7 +149,12 @@ inline std::string to_string(const types::Type &type) {
     return "RMC";
   case types::Type::GLL:
     return "GLL";
+  case types::Type::VTG:
+    return "VTG";
+  case types::Type::ZDA:
+    return "ZDA";
   }
+
   return "--";
 }
 

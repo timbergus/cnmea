@@ -40,5 +40,29 @@ int main() {
     std::println("Error: {}", cnmea::to_string(gll_result.error()));
   }
 
+  std::println("--------------------------------------------------");
+
+  std::string vtg_sample = "$GNVTG,054.7,T,034.4,M,005.5,N,010.2,K,A*3B";
+
+  auto vtg_result = cnmea::vtg::parse(vtg_sample);
+
+  if (vtg_result) {
+    cnmea::vtg::print(vtg_result.value());
+  } else {
+    std::println("Error: {}", cnmea::to_string(vtg_result.error()));
+  }
+
+  std::println("--------------------------------------------------");
+
+  std::string zda_sample = "$GNZDA,201530.00,04,07,2002,00,00*7E";
+
+  auto zda_result = cnmea::zda::parse(zda_sample);
+
+  if (zda_result) {
+    cnmea::zda::print(zda_result.value());
+  } else {
+    std::println("Error: {}", cnmea::to_string(zda_result.error()));
+  }
+
   return EXIT_SUCCESS;
 }
