@@ -7,6 +7,8 @@
 
 #include "gga.h"
 #include "gll.h"
+#include "gsa.h"
+#include "gsv.h"
 #include "rmc.h"
 #include "types.h"
 #include "vtg.h"
@@ -14,21 +16,27 @@
 
 namespace cnmea {
 
-using RMC = rmc::RMC;
 using GGA = gga::GGA;
 using GLL = gll::GLL;
+using GSA = gsa::GSA;
+using GSV = gsv::GSV;
+using RMC = rmc::RMC;
 using VTG = vtg::VTG;
 using ZDA = zda::ZDA;
 
-using Sample = std::variant<RMC, GGA, GLL, VTG, ZDA>;
+using Sample = std::variant<GGA, GLL, GSA, GSV, RMC, VTG, ZDA>;
 
 inline std::expected<Sample, types::ParseError> parse(std::string_view sample) {
-  if (sample.find("RMC") != std::string::npos) {
-    return rmc::parse(sample);
-  } else if (sample.find("GGA") != std::string::npos) {
+  if (sample.find("GGA") != std::string::npos) {
     return gga::parse(sample);
   } else if (sample.find("GLL") != std::string::npos) {
     return gll::parse(sample);
+  } else if (sample.find("GSA") != std::string::npos) {
+    return gsa::parse(sample);
+  } else if (sample.find("GSV") != std::string::npos) {
+    return gsv::parse(sample);
+  } else if (sample.find("RMC") != std::string::npos) {
+    return rmc::parse(sample);
   } else if (sample.find("VTG") != std::string::npos) {
     return vtg::parse(sample);
   } else if (sample.find("ZDA") != std::string::npos) {
@@ -41,12 +49,16 @@ inline void print(const Sample &sample) {
   std::visit(
       [](auto &&data) {
         using T = std::decay_t<decltype(data)>;
-        if constexpr (std::is_same_v<T, rmc::RMC>) {
-          rmc::print(data);
-        } else if constexpr (std::is_same_v<T, gga::GGA>) {
+        if constexpr (std::is_same_v<T, gga::GGA>) {
           gga::print(data);
         } else if constexpr (std::is_same_v<T, gll::GLL>) {
           gll::print(data);
+        } else if constexpr (std::is_same_v<T, gsa::GSA>) {
+          gsa::print(data);
+        } else if constexpr (std::is_same_v<T, gsv::GSV>) {
+          gsv::print(data);
+        } else if constexpr (std::is_same_v<T, rmc::RMC>) {
+          rmc::print(data);
         } else if constexpr (std::is_same_v<T, vtg::VTG>) {
           vtg::print(data);
         } else if constexpr (std::is_same_v<T, zda::ZDA>) {

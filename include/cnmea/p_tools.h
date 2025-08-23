@@ -1,6 +1,7 @@
 #pragma once
 
 #include <format>
+#include <print>
 #include <string>
 
 #include "types.h"
@@ -145,10 +146,14 @@ inline std::string to_string(const types::Type &type) {
   switch (type) {
   case types::Type::GGA:
     return "GGA";
-  case types::Type::RMC:
-    return "RMC";
   case types::Type::GLL:
     return "GLL";
+  case types::Type::GSA:
+    return "GSA";
+  case types::Type::GSV:
+    return "GSV";
+  case types::Type::RMC:
+    return "RMC";
   case types::Type::VTG:
     return "VTG";
   case types::Type::ZDA:
@@ -246,6 +251,50 @@ inline std::string
 to_string(const std::optional<types::DgpsStationId> &dgps_station_id) {
   if (dgps_station_id) {
     return std::format("{}", dgps_station_id->value());
+  }
+  return "--";
+}
+
+inline std::string
+to_string(const std::optional<types::SelectionMode> &selection_mode) {
+  if (selection_mode) {
+    switch (selection_mode.value()) {
+    case types::SelectionMode::Manual:
+      return "Manual";
+    case types::SelectionMode::Automatic:
+      return "Automatic";
+    }
+  }
+  return "--";
+}
+
+inline std::string to_string(const std::optional<types::FixType> &fix_type) {
+  if (fix_type) {
+    switch (fix_type.value()) {
+    case types::FixType::None:
+      return "None";
+    case types::FixType::TwoD:
+      return "2D";
+    case types::FixType::ThreeD:
+      return "3D";
+    }
+  }
+  return "--";
+}
+
+inline std::string to_string(const std::optional<types::Satellite> &satellite) {
+  if (satellite) {
+    return std::format("PRN: {}, SNR: {}, Elevation: {}, Azimuth: {}",
+                       satellite->prn, satellite->snr, satellite->elevation,
+                       satellite->azimuth);
+  }
+  return "--";
+}
+
+inline std::string to_string(const std::optional<types::DOP> &dop) {
+  if (dop) {
+    return std::format("PDOP: {}, HDOP: {}, VDOP: {}", dop->pdop, dop->hdop,
+                       dop->vdop);
   }
   return "--";
 }

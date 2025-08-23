@@ -193,8 +193,10 @@ struct UTCDate {
  */
 enum class Type {
   GGA, ///< Global Positioning System Fix Data
-  RMC, ///< Recommended Minimum Specific GPS/Transit Data
   GLL, ///< Geographic Position – Latitude/Longitude
+  GSA, ///< GPS DOP and Active Satellites
+  GSV, ///< GPS DOP and Active Satellites
+  RMC, ///< Recommended Minimum Specific GPS/Transit Data
   VTG, ///< Track Made Good and Ground Speed
   ZDA  ///< Time & Date
 };
@@ -334,6 +336,38 @@ public:
   int value() const { return id; }
 };
 /** @} */
+
+/// @brief Mode 1: Selection of fix type (manual/auto).
+enum class SelectionMode {
+  Manual,   ///< Manual 2D/3D fix selection.
+  Automatic ///< Automatic 2D/3D fix selection.
+};
+
+/// @brief Mode 2: Fix type.
+enum class FixType {
+  None,  ///< No fix
+  TwoD,  ///< 2D fix
+  ThreeD ///< 3D fix
+};
+
+/**
+ * @brief Represents the GPS DOP (Dilution of Precision) values.
+ */
+struct DOP {
+  double pdop; ///< Position DOP
+  double hdop; ///< Horizontal DOP
+  double vdop; ///< Vertical DOP
+};
+
+/**
+ * @brief Represents the satellite information in the GSV sentence.
+ */
+struct Satellite {
+  int prn;          ///< Satellite PRN (Pseudo-Random Noise number)
+  double elevation; ///< Elevation angle in degrees (0–90)
+  double azimuth;   ///< Azimuth angle in degrees (0–359)
+  double snr;       ///< Signal-to-Noise Ratio in dBHz (0–99)
+};
 
 /**
  * @brief Generic variant element type for parse results.

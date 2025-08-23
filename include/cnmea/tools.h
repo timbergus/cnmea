@@ -3,6 +3,7 @@
 #include <expected>
 #include <iomanip>
 #include <iostream>
+#include <print>
 #include <sstream>
 #include <string_view>
 #include <vector>
@@ -228,6 +229,10 @@ inline types::Type parse_type(std::string_view type) {
     return types::Type::RMC;
   } else if (type.find("GLL") != std::string::npos) {
     return types::Type::GLL;
+  } else if (type.find("GSA") != std::string::npos) {
+    return types::Type::GSA;
+  } else if (type.find("GSV") != std::string::npos) {
+    return types::Type::GSV;
   } else if (type.find("VTG") != std::string::npos) {
     return types::Type::VTG;
   } else if (type.find("ZDA") != std::string::npos) {
@@ -323,6 +328,68 @@ parse_dgps_station_id(std::string_view dgps_station_id) {
   auto dgps_station_id_value = tools::parse_numeric_value(dgps_station_id);
   if (dgps_station_id_value) {
     return types::DgpsStationId(dgps_station_id_value.value());
+  } else {
+    return std::nullopt;
+  }
+}
+
+inline types::SelectionMode
+parse_selection_mode(std::string_view selection_mode) {
+  if (selection_mode == "M") {
+    return types::SelectionMode::Manual;
+  } else if (selection_mode == "A") {
+    return types::SelectionMode::Automatic;
+  }
+  throw std::invalid_argument("Unknown type");
+}
+
+inline types::FixType parse_fix_type(std::string_view fix_type) {
+  if (fix_type == "1") {
+    return types::FixType::None;
+  } else if (fix_type == "2") {
+    return types::FixType::TwoD;
+  } else if (fix_type == "3") {
+    return types::FixType::ThreeD;
+  }
+  throw std::invalid_argument("Unknown type");
+}
+
+inline std::optional<types::DOP>
+parse_dop(std::string_view pdop, std::string_view hdop, std::string_view vdop) {
+  if (pdop.empty() || hdop.empty() || vdop.empty()) {
+    return std::nullopt;
+  }
+
+  auto pdop_value = tools::parse_numeric_value(pdop);
+  auto hdop_value = tools::parse_numeric_value(hdop);
+  auto vdop_value = tools::parse_numeric_value(vdop);
+
+  if (pdop_value && hdop_value && vdop_value) {
+    return types::DOP{pdop_value.value(), hdop_value.value(),
+                      vdop_value.value()};
+  } else {
+    return std::nullopt;
+  }
+}
+
+inline std::optional<types::Satellite>
+parse_satellite(std::string_view prn, std::string_view snr,
+                std::string_view elevation, std::string_view azimuth) {
+  if (prn.empty()) {
+    return std::nullopt;
+  }
+
+  auto prn_value = tools::parse_numeric_value(prn);
+  auto snr_value = tools::parse_numeric_value(snr).value_or(
+      std::numeric_limits<double>::quiet_NaN());
+  auto elevation_value = tools::parse_numeric_value(elevation).value_or(
+      std::numeric_limits<double>::quiet_NaN());
+  auto azimuth_value = tools::parse_numeric_value(azimuth).value_or(
+      std::numeric_limits<double>::quiet_NaN());
+
+  if (prn_value) {
+    return types::Satellite{static_cast<int>(prn_value.value()), snr_value,
+                            elevation_value, azimuth_value};
   } else {
     return std::nullopt;
   }
