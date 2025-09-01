@@ -2,27 +2,23 @@ BUILD=build
 PROJECT=cnmea
 
 init:
-	cmake -B $(BUILD) \
-  	-DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang \
-  	-DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++
+	cmake --preset=release
 
 project: init
-	cmake --build $(BUILD) --config Release
+	cmake --build $(BUILD)
 
+# Use "~/.local" for installation prefix to install it for the current user.
 install: project
-	cmake --install $(BUILD) --config Release --prefix install
+	cmake --install $(BUILD) --prefix install
 
 start: project
 	./$(BUILD)/$(PROJECT)_usage
 
 documentation: project
-	cmake --build $(BUILD) --target docs
+	cmake --build $(BUILD) --target $(PROJECT)_docs
 
 test: project
 	ctest --test-dir $(BUILD)
 
-package: project documentation
-	cpack -G ZIP --config $(BUILD)/CPackConfig.cmake
-
 clean:
-	rm -rf $(BUILD) .cache docs _CPack* *.zip
+	rm -rf $(BUILD) install docs .cache
