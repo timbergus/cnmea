@@ -160,7 +160,7 @@ private:
   SpeedUnits units; ///< Unit of speed
 
 public:
-  Speed(double value, SpeedUnits units = SpeedUnits::knots)
+  explicit Speed(double value, SpeedUnits units = SpeedUnits::knots)
       : value(value), units(units) {}
   double get_value() const { return value; }
   SpeedUnits get_units() const { return units; }
@@ -287,7 +287,7 @@ private:
   DistanceUnits units; ///< Units
 
 public:
-  Altitude(double value, DistanceUnits units = DistanceUnits::m)
+  explicit Altitude(double value, DistanceUnits units = DistanceUnits::m)
       : value(value), units(units) {}
   double get_value() const { return value; }
   DistanceUnits get_units() const { return units; }
@@ -301,7 +301,7 @@ private:
   DistanceUnits units; ///< Units
 
 public:
-  GeoidSeparation(double value, DistanceUnits units = DistanceUnits::m)
+  explicit GeoidSeparation(double value, DistanceUnits units = DistanceUnits::m)
       : value(value), units(units) {}
   double get_value() const { return value; }
   DistanceUnits get_units() const { return units; }

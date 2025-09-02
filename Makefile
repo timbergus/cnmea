@@ -1,8 +1,10 @@
 BUILD=build
+BUILD_TYPE ?= debug
 PROJECT=cnmea
 
+# To execute it with a different value you can use make BUILD_TYPE=release
 init:
-	cmake --preset=release
+	cmake --preset=$(BUILD_TYPE)
 
 project: init
 	cmake --build $(BUILD)

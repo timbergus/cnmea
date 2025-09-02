@@ -27,19 +27,19 @@ using ZDA = zda::ZDA;
 using Sample = std::variant<GGA, GLL, GSA, GSV, RMC, VTG, ZDA>;
 
 inline std::expected<Sample, types::ParseError> parse(std::string_view sample) {
-  if (sample.find("GGA") != std::string::npos) {
+  if (sample.contains("GGA")) {
     return gga::parse(sample);
-  } else if (sample.find("GLL") != std::string::npos) {
+  } else if (sample.contains("GLL")) {
     return gll::parse(sample);
-  } else if (sample.find("GSA") != std::string::npos) {
+  } else if (sample.contains("GSA")) {
     return gsa::parse(sample);
-  } else if (sample.find("GSV") != std::string::npos) {
+  } else if (sample.contains("GSV")) {
     return gsv::parse(sample);
-  } else if (sample.find("RMC") != std::string::npos) {
+  } else if (sample.contains("RMC")) {
     return rmc::parse(sample);
-  } else if (sample.find("VTG") != std::string::npos) {
+  } else if (sample.contains("VTG")) {
     return vtg::parse(sample);
-  } else if (sample.find("ZDA") != std::string::npos) {
+  } else if (sample.contains("ZDA")) {
     return zda::parse(sample);
   }
   return std::unexpected(types::ParseError::UnsupportedType);

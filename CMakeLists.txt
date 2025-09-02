@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 4.1.1)
 project(
   cnmea
   VERSION
-    0.0.10
+    0.0.11
   DESCRIPTION
     "C NMEA 0183 Parser"
   LANGUAGES
@@ -13,6 +13,14 @@ project(
 set(
   PROJECT_AUTHOR
     "Gustavo Muñoz"
+)
+
+set(
+  MY_WARNINGS
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Werror
 )
 
 # >>> Library definition
@@ -31,10 +39,7 @@ target_include_directories(${PROJECT_NAME}
 
 target_compile_options(${PROJECT_NAME}
   INTERFACE
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Werror
+    ${MY_WARNINGS}
 )
 # <<< Library definition
 
@@ -72,10 +77,7 @@ add_executable(${PROJECT_NAME}_usage ${PROJECT_NAME}_usage/main.cpp)
 
 target_compile_options(${PROJECT_NAME}_usage
   PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Werror
+    ${MY_WARNINGS}
 )
 
 target_link_libraries(${PROJECT_NAME}_usage

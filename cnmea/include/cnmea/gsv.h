@@ -31,9 +31,12 @@ inline std::expected<GSV, types::ParseError> parse(std::string_view sample) {
   GSV gsv;
 
   gsv.type = tools::parse_type(tokens[0]);
-  gsv.total_messages = tools::parse_numeric_value(tokens[1]).value_or(0);
-  gsv.message_number = tools::parse_numeric_value(tokens[2]).value_or(0);
-  gsv.satellites_in_view = tools::parse_numeric_value(tokens[3]).value_or(0);
+  gsv.total_messages =
+      static_cast<int>(tools::parse_numeric_value(tokens[1]).value_or(0));
+  gsv.message_number =
+      static_cast<int>(tools::parse_numeric_value(tokens[2]).value_or(0));
+  gsv.satellites_in_view =
+      static_cast<int>(tools::parse_numeric_value(tokens[3]).value_or(0));
 
   // Parse satellite information (up to 4 satellites)
   for (size_t i = 4; i < tokens.size(); i += 4) {

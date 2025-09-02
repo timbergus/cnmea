@@ -20,26 +20,27 @@ inline std::string to_string(const types::Status &status) {
 
 inline std::string to_string(const std::optional<types::Mode> &mode) {
   if (mode) {
+    using enum types::Mode;
     switch (mode.value()) {
-    case types::Mode::Autonomous:
+    case Autonomous:
       return "Autonomous";
-    case types::Mode::Differential:
+    case Differential:
       return "Differential";
-    case types::Mode::Estimated:
+    case Estimated:
       return "Estimated";
-    case types::Mode::ManualInput:
+    case ManualInput:
       return "Manual Input";
-    case types::Mode::NotValid:
+    case NotValid:
       return "Not Valid";
-    case types::Mode::Simulation:
+    case Simulation:
       return "Simulation";
-    case types::Mode::Precise:
+    case Precise:
       return "Precise";
-    case types::Mode::RTKFixed:
+    case RTKFixed:
       return "RTK Fixed";
-    case types::Mode::RTKFloat:
+    case RTKFloat:
       return "RTK Float";
-    case types::Mode::Uncalibrated:
+    case Uncalibrated:
       return "Uncalibrated";
     }
   }
@@ -47,45 +48,48 @@ inline std::string to_string(const std::optional<types::Mode> &mode) {
 }
 
 inline std::string to_string(const types::SpeedUnits &speed_units) {
+  using enum types::SpeedUnits;
   switch (speed_units) {
-  case types::SpeedUnits::ms:
+  case ms:
     return "m/s";
-  case types::SpeedUnits::kmh:
+  case kmh:
     return "km/h";
-  case types::SpeedUnits::knots:
+  case knots:
     return "knots";
   }
   return "--";
 }
 
 inline std::string to_string(const types::DistanceUnits &distance_units) {
+  using enum types::DistanceUnits;
   switch (distance_units) {
-  case types::DistanceUnits::m:
+  case m:
     return "m";
-  case types::DistanceUnits::km:
+  case km:
     return "km";
-  case types::DistanceUnits::ft:
+  case ft:
     return "ft";
   }
   return "--";
 }
 
 inline std::string to_string(const types::Direction &direction) {
+  using enum types::Direction;
   switch (direction) {
-  case types::Direction::North:
+  case North:
     return "North";
-  case types::Direction::South:
+  case South:
     return "South";
-  case types::Direction::East:
+  case East:
     return "East";
-  case types::Direction::West:
+  case West:
     return "West";
   }
   return "--";
 }
 
 inline std::string to_string(const std::optional<types::Latitude> &latitude) {
-  if (latitude) {
+  if (latitude.has_value()) {
     return std::format("{} {}", latitude->get_degrees(),
                        to_string(latitude->get_direction()));
   }
@@ -93,7 +97,7 @@ inline std::string to_string(const std::optional<types::Latitude> &latitude) {
 }
 
 inline std::string to_string(const std::optional<types::Longitude> &longitude) {
-  if (longitude) {
+  if (longitude.has_value()) {
     return std::format("{} {}", longitude->get_degrees(),
                        to_string(longitude->get_direction()));
   }
@@ -101,14 +105,14 @@ inline std::string to_string(const std::optional<types::Longitude> &longitude) {
 }
 
 inline std::string to_string(const std::optional<types::Course> &course) {
-  if (course) {
+  if (course.has_value()) {
     return std::format("{}", course->value_degrees());
   }
   return "--";
 }
 
 inline std::string to_string(const std::optional<types::UTCDate> &utc_date) {
-  if (utc_date) {
+  if (utc_date.has_value()) {
     return std::format("{}/{}/{}", utc_date->day, utc_date->month,
                        utc_date->year);
   }
@@ -143,20 +147,21 @@ to_string(const std::optional<types::MagneticVariation> &magnetic_variation) {
 }
 
 inline std::string to_string(const types::Type &type) {
+  using enum types::Type;
   switch (type) {
-  case types::Type::GGA:
+  case GGA:
     return "GGA";
-  case types::Type::GLL:
+  case GLL:
     return "GLL";
-  case types::Type::GSA:
+  case GSA:
     return "GSA";
-  case types::Type::GSV:
+  case GSV:
     return "GSV";
-  case types::Type::RMC:
+  case RMC:
     return "RMC";
-  case types::Type::VTG:
+  case VTG:
     return "VTG";
-  case types::Type::ZDA:
+  case ZDA:
     return "ZDA";
   }
 
@@ -164,32 +169,33 @@ inline std::string to_string(const types::Type &type) {
 }
 
 inline std::string to_string(const types::ParseError &error) {
+  using enum types::ParseError;
   switch (error) {
-  case types::ParseError::InvalidFormat:
+  case InvalidFormat:
     return "Invalid Format";
-  case types::ParseError::UnsupportedType:
+  case UnsupportedType:
     return "Unsupported Type";
-  case types::ParseError::InvalidDirection:
+  case InvalidDirection:
     return "Invalid Direction";
-  case types::ParseError::MissingFields:
+  case MissingFields:
     return "Missing Fields";
-  case types::ParseError::UnknownError:
+  case UnknownError:
     return "Unknown Error";
-  case types::ParseError::InvalidLatitude:
+  case InvalidLatitude:
     return "Invalid Latitude";
-  case types::ParseError::InvalidLongitude:
+  case InvalidLongitude:
     return "Invalid Longitude";
-  case types::ParseError::InvalidSpeed:
+  case InvalidSpeed:
     return "Invalid Speed";
-  case types::ParseError::InvalidCourse:
+  case InvalidCourse:
     return "Invalid Course";
-  case types::ParseError::InvalidUTCDate:
+  case InvalidUTCDate:
     return "Invalid UTC Date";
-  case types::ParseError::InvalidUTCTime:
+  case InvalidUTCTime:
     return "Invalid UTC Time";
-  case types::ParseError::InvalidMagneticVariation:
+  case InvalidMagneticVariation:
     return "Invalid Magnetic Variation";
-  case types::ParseError::InvalidMode:
+  case InvalidMode:
     return "Invalid Mode";
   }
   return "--";
@@ -198,24 +204,25 @@ inline std::string to_string(const types::ParseError &error) {
 inline std::string
 to_string(const std::optional<types::FixQuality> &fix_quality) {
   if (fix_quality) {
+    using enum types::FixQuality;
     switch (fix_quality.value()) {
-    case types::FixQuality::Invalid:
+    case Invalid:
       return "Invalid";
-    case types::FixQuality::GPS:
+    case GPS:
       return "GPS";
-    case types::FixQuality::DGPS:
+    case DGPS:
       return "DGPS";
-    case types::FixQuality::PPS:
+    case PPS:
       return "PPS";
-    case types::FixQuality::RealTimeKinematic:
+    case RealTimeKinematic:
       return "Real Time Kinematic";
-    case types::FixQuality::FloatRTK:
+    case FloatRTK:
       return "Float RTK";
-    case types::FixQuality::Estimated:
+    case Estimated:
       return "Estimated";
-    case types::FixQuality::ManualInput:
+    case ManualInput:
       return "Manual Input";
-    case types::FixQuality::Simulation:
+    case Simulation:
       return "Simulation";
     }
   }
@@ -270,12 +277,13 @@ to_string(const std::optional<types::SelectionMode> &selection_mode) {
 
 inline std::string to_string(const std::optional<types::FixType> &fix_type) {
   if (fix_type) {
+    using enum types::FixType;
     switch (fix_type.value()) {
-    case types::FixType::None:
+    case None:
       return "None";
-    case types::FixType::TwoD:
+    case TwoD:
       return "2D";
-    case types::FixType::ThreeD:
+    case ThreeD:
       return "3D";
     }
   }

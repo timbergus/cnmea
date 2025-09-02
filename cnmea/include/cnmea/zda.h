@@ -57,10 +57,10 @@ inline void print(const ZDA &data) {
   std::println("Day: {}", data.day);
   std::println("Month: {}", data.month);
   std::println("Year: {}", data.year);
-  if (data.local_zone_hours) {
+  if (data.local_zone_hours.has_value()) {
     std::println("Local Zone Hours: {}", *data.local_zone_hours);
   }
-  if (data.local_zone_minutes) {
+  if (data.local_zone_minutes.has_value()) {
     std::println("Local Zone Minutes: {}", *data.local_zone_minutes);
   }
 }
