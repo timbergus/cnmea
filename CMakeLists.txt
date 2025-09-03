@@ -1,34 +1,28 @@
 cmake_minimum_required(VERSION 4.1.1)
+
 project(
   cnmea
-  VERSION
-    0.0.11
-  DESCRIPTION
-    "C NMEA 0183 Parser"
-  LANGUAGES
-    C
-    CXX
+  VERSION 0.0.12
+  DESCRIPTION "C NMEA 0183 Parser"
+  LANGUAGES C CXX
 )
 
-set(
-  PROJECT_AUTHOR
-    "Gustavo Muñoz"
-)
+# >>> Project metadata
+set(PROJECT_AUTHOR "Gustavo Muñoz")
 
-set(
-  MY_WARNINGS
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Werror
-)
+# Language standards (safe even without presets)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# >>> Library definition
+# Common warnings
+set(MY_WARNINGS -Wall -Wextra -Wpedantic -Werror)
+# <<< Project metadata
+
+# >>> Library definition (header-only, INTERFACE)
 add_library(${PROJECT_NAME} INTERFACE)
-add_library(${PROJECT_NAME}::${PROJECT_NAME}
-  ALIAS
-    ${PROJECT_NAME}
-)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # Tell consumers where to find headers
 target_include_directories(${PROJECT_NAME}
@@ -37,57 +31,55 @@ target_include_directories(${PROJECT_NAME}
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_compile_options(${PROJECT_NAME}
-  INTERFACE
-    ${MY_WARNINGS}
-)
+target_compile_options(${PROJECT_NAME} INTERFACE ${MY_WARNINGS})
 # <<< Library definition
 
 # >>> Install configuration
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
+# Export targets
 install(
-  TARGETS
-    ${PROJECT_NAME}
-  EXPORT
-    ${PROJECT_NAME}Targets
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}Targets
+)
+
+# Config and version files for find_package()
+install(
+  EXPORT ${PROJECT_NAME}Targets
+  FILE ${PROJECT_NAME}Config.cmake
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
 )
 
 install(
-  EXPORT
-    ${PROJECT_NAME}Targets
-  FILE
-    ${PROJECT_NAME}Config.cmake
-  NAMESPACE
-    ${PROJECT_NAME}::
-  DESTINATION
-    ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
+# Headers
 install(
-  DIRECTORY
-    ${PROJECT_NAME}/include/
-  DESTINATION
-    ${CMAKE_INSTALL_INCLUDEDIR}
+  DIRECTORY ${PROJECT_NAME}/include/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 # <<< Install rules
 
 # >>> Example program
 add_executable(${PROJECT_NAME}_usage ${PROJECT_NAME}_usage/main.cpp)
 
-target_compile_options(${PROJECT_NAME}_usage
-  PRIVATE
-    ${MY_WARNINGS}
-)
-
 target_link_libraries(${PROJECT_NAME}_usage
-  PRIVATE
-    ${PROJECT_NAME}::${PROJECT_NAME}
+  PRIVATE ${PROJECT_NAME}::${PROJECT_NAME}
 )
 # <<< Example program
 
-# >>> Doxygen setup
-find_package(Doxygen REQUIRED)
+# >>> Documentation (optional if Doxygen not installed)
+find_package(Doxygen QUIET)
 
 if (DOXYGEN_FOUND)
   set(DOXYGEN_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/docs)
@@ -100,16 +92,15 @@ if (DOXYGEN_FOUND)
 
   add_custom_target(
     ${PROJECT_NAME}_docs
-    COMMAND
-      ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-    WORKING_DIRECTORY
-      ${CMAKE_SOURCE_DIR}
-    COMMENT
-      "Generating API documentation with Doxygen"
+    COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Generating API documentation with Doxygen"
     VERBATIM
   )
+else()
+  message(STATUS "Doxygen not found, skipping documentation target")
 endif()
-# <<< Doxygen setup
+# <<< Documentation (optional if Doxygen not installed)
 
 # >>> Testing
 include(CTest)
