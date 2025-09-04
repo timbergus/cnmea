@@ -82,6 +82,8 @@ target_link_libraries(${PROJECT_NAME}_usage
 find_package(Doxygen QUIET)
 
 if (DOXYGEN_FOUND)
+  message(STATUS "Doxygen ---> found")
+
   set(DOXYGEN_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/docs)
   set(DOXYGEN_INPUT_DIR ${CMAKE_SOURCE_DIR}/${PROJECT_NAME})
 
@@ -98,7 +100,7 @@ if (DOXYGEN_FOUND)
     VERBATIM
   )
 else()
-  message(STATUS "Doxygen not found, skipping documentation target")
+  message(STATUS "Doxygen ---> not found, skipping documentation target")
 endif()
 # <<< Documentation (optional if Doxygen not installed)
 
