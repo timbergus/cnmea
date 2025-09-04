@@ -47,21 +47,21 @@ inline std::expected<Sample, types::ParseError> parse(std::string_view sample) {
 
 inline void print(const Sample &sample) {
   std::visit(
-      [](auto &&data) {
-        using T = std::decay_t<decltype(data)>;
-        if constexpr (std::is_same_v<T, gga::GGA>) {
+      []<typename T>(const T &data) {
+        using data_type = std::decay_t<decltype(data)>;
+        if constexpr (std::is_same_v<data_type, gga::GGA>) {
           gga::print(data);
-        } else if constexpr (std::is_same_v<T, gll::GLL>) {
+        } else if constexpr (std::is_same_v<data_type, gll::GLL>) {
           gll::print(data);
-        } else if constexpr (std::is_same_v<T, gsa::GSA>) {
+        } else if constexpr (std::is_same_v<data_type, gsa::GSA>) {
           gsa::print(data);
-        } else if constexpr (std::is_same_v<T, gsv::GSV>) {
+        } else if constexpr (std::is_same_v<data_type, gsv::GSV>) {
           gsv::print(data);
-        } else if constexpr (std::is_same_v<T, rmc::RMC>) {
+        } else if constexpr (std::is_same_v<data_type, rmc::RMC>) {
           rmc::print(data);
-        } else if constexpr (std::is_same_v<T, vtg::VTG>) {
+        } else if constexpr (std::is_same_v<data_type, vtg::VTG>) {
           vtg::print(data);
-        } else if constexpr (std::is_same_v<T, zda::ZDA>) {
+        } else if constexpr (std::is_same_v<data_type, zda::ZDA>) {
           zda::print(data);
         } else {
           std::println("Print function not implemented for this type");
@@ -72,9 +72,9 @@ inline void print(const Sample &sample) {
 
 inline std::string to_string(const types::Element &element) {
   return std::visit(
-      [](auto &&data) {
-        using T = std::decay_t<decltype(data)>;
-        if constexpr (std::is_same_v<T, types::ParseError>) {
+      []<typename T>(const T &data) {
+        using data_type = std::decay_t<decltype(data)>;
+        if constexpr (std::is_same_v<data_type, types::ParseError>) {
           return p_tools::to_string(data);
         } else {
           return std::string("To string function not implemented for Element");
